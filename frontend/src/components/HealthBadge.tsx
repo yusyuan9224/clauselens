@@ -17,8 +17,8 @@ export function HealthBadge() {
 
   if (loading) {
     return (
-      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <span className="inline-block w-2 h-2 rounded-full bg-gray-300 animate-pulse" />
+      <div className="flex items-center gap-2 font-mono text-[11px] tracking-wide text-muted-foreground">
+        <span className="inline-block w-1.5 h-1.5 rounded-full bg-border animate-pulse" />
         <span>檢查後端...</span>
       </div>
     );
@@ -26,8 +26,8 @@ export function HealthBadge() {
 
   if (!health) {
     return (
-      <div className="flex items-center gap-1.5 text-xs text-red-600">
-        <span className="inline-block w-2 h-2 rounded-full bg-red-500" />
+      <div className="flex items-center gap-2 font-mono text-[11px] tracking-wide text-risk-high">
+        <span className="inline-block w-1.5 h-1.5 rounded-full bg-risk-high" />
         <span>後端未連線</span>
       </div>
     );
@@ -35,15 +35,15 @@ export function HealthBadge() {
 
   const isOk = health.status === "ok";
   return (
-    <div className="flex items-center gap-1.5 text-xs">
+    <div className="flex items-center gap-2 font-mono text-[11px] tracking-wide">
       <span
-        className={`inline-block w-2 h-2 rounded-full ${isOk ? "bg-green-500" : "bg-yellow-500"}`}
+        className={`inline-block w-1.5 h-1.5 rounded-full ${isOk ? "bg-risk-safe" : "bg-risk-medium"}`}
       />
-      <span className={isOk ? "text-green-700" : "text-yellow-700"}>
+      <span className={isOk ? "text-muted-foreground" : "text-risk-medium"}>
         後端{isOk ? "正常" : "降級"}
       </span>
       {health.models.length > 0 && (
-        <span className="text-muted-foreground ml-1">
+        <span className="text-muted-foreground/70 hidden md:inline">
           · {health.models.join(", ")}
         </span>
       )}

@@ -97,7 +97,7 @@ export function ContractText({ report, activeRiskIndex, onMarkClick }: Props) {
   return (
     <div
       ref={containerRef}
-      className="text-sm leading-7 whitespace-pre-wrap font-[PingFang_TC,Microsoft_JhengHei,system-ui,sans-serif] text-foreground"
+      className="font-serif text-[15px] leading-8 whitespace-pre-wrap text-foreground"
     >
       {segments.map((seg) => {
         if (!seg.highlight) {

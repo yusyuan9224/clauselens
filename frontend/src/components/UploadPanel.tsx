@@ -4,7 +4,6 @@ import { useCallback, useRef, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { analyzeFile, analyzeText } from "@/lib/api";
-import { Upload, FileText, AlertCircle } from "lucide-react";
 
 const ACCEPTED = [".pdf", ".docx", ".txt", ".md"];
 const MAX_BYTES = 20 * 1024 * 1024;
@@ -86,13 +85,17 @@ export function UploadPanel({ onJobStarted }: Props) {
   return (
     <div className="w-full max-w-xl mx-auto">
       <Tabs value={tab} onValueChange={setTab}>
-        <TabsList className="w-full mb-6 bg-secondary border border-border">
-          <TabsTrigger value="file" className="flex-1 gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm">
-            <Upload className="w-4 h-4" />
+        <TabsList variant="line" className="w-full mb-6 h-auto rounded-none border-b border-border p-0 gap-6">
+          <TabsTrigger
+            value="file"
+            className="flex-none rounded-none px-0 pb-2.5 pt-1 text-sm tracking-wide"
+          >
             上傳檔案
           </TabsTrigger>
-          <TabsTrigger value="text" className="flex-1 gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm">
-            <FileText className="w-4 h-4" />
+          <TabsTrigger
+            value="text"
+            className="flex-none rounded-none px-0 pb-2.5 pt-1 text-sm tracking-wide"
+          >
             貼上文字
           </TabsTrigger>
         </TabsList>
@@ -104,14 +107,14 @@ export function UploadPanel({ onJobStarted }: Props) {
             onDragLeave={onDragLeave}
             onClick={() => fileInputRef.current?.click()}
             className={[
-              "relative flex flex-col items-center justify-center gap-4",
-              "border-2 border-dashed rounded-xl p-12 cursor-pointer",
-              "transition-all duration-150 select-none",
+              "relative flex flex-col items-center justify-center gap-3",
+              "border rounded-sm bg-card px-8 py-14 cursor-pointer text-center",
+              "transition-colors duration-150 select-none",
               dragging
-                ? "border-[--cl-navy] bg-blue-50/60"
+                ? "border-foreground bg-secondary/60"
                 : selectedFile
-                  ? "border-green-400 bg-green-50/40"
-                  : "border-border hover:border-[--cl-navy-light] hover:bg-secondary/60",
+                  ? "border-risk-safe bg-risk-safe-bg/60"
+                  : "border-border hover:border-foreground/40",
             ].join(" ")}
           >
             <input
@@ -123,42 +126,42 @@ export function UploadPanel({ onJobStarted }: Props) {
             />
             {selectedFile ? (
               <>
-                <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                  <FileText className="w-6 h-6 text-green-600" />
-                </div>
-                <div className="text-center">
-                  <p className="font-medium text-sm text-foreground">{selectedFile.name}</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {(selectedFile.size / 1024).toFixed(0)} KB · 點擊可更換
-                  </p>
-                </div>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-risk-safe">
+                  文件已收訖
+                </p>
+                <p className="font-serif text-base font-semibold text-foreground break-all">
+                  {selectedFile.name}
+                </p>
+                <p className="font-mono text-[11px] text-muted-foreground tabular-nums">
+                  {(selectedFile.size / 1024).toFixed(0)} KB · 點擊可更換
+                </p>
               </>
             ) : (
               <>
-                <div className="w-12 h-12 rounded-full bg-secondary border border-border flex items-center justify-center">
-                  <Upload className="w-6 h-6 text-muted-foreground" />
-                </div>
-                <div className="text-center">
-                  <p className="font-medium text-sm text-foreground">拖放或點擊上傳</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    支援 PDF、DOCX、TXT、MD，最大 20MB
-                  </p>
-                </div>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                  文件收件
+                </p>
+                <p className="font-serif text-lg font-semibold text-foreground">
+                  送交合約文件
+                </p>
+                <p className="font-mono text-[11px] text-muted-foreground">
+                  拖放或點擊上傳 · PDF / DOCX / TXT / MD · ≤ 20MB
+                </p>
               </>
             )}
           </div>
 
           {error && tab === "file" && (
-            <div className="flex items-start gap-2 mt-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-              <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
-              <span>{error}</span>
+            <div className="mt-3 border border-risk-high bg-risk-high-bg rounded-sm px-3 py-2 text-sm text-risk-high">
+              <span className="font-mono text-[10px] uppercase tracking-[0.15em] mr-2">錯誤</span>
+              {error}
             </div>
           )}
 
           <Button
             onClick={handleSubmitFile}
             disabled={!selectedFile || loading}
-            className="w-full mt-4 bg-[--cl-navy] hover:bg-[--cl-navy-light] text-white h-11 text-sm font-medium"
+            className={`w-full mt-5 h-11 text-sm font-medium tracking-wide rounded-sm ${loading ? "" : "disabled:opacity-100 disabled:bg-muted disabled:text-muted-foreground"}`}
           >
             {loading ? (
               <span className="flex items-center gap-2">
@@ -177,24 +180,24 @@ export function UploadPanel({ onJobStarted }: Props) {
             onChange={(e) => setText(e.target.value)}
             placeholder="在此貼上合約全文..."
             className={[
-              "w-full min-h-[220px] rounded-xl border border-border bg-white",
+              "w-full min-h-[220px] rounded-sm border border-border bg-card",
               "px-4 py-3 text-sm leading-relaxed resize-y",
-              "placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[--cl-navy]/30 focus:border-[--cl-navy]",
+              "placeholder:text-muted-foreground focus:outline-none focus:border-foreground/60 focus:ring-1 focus:ring-foreground/20",
               "font-[PingFang_TC,Microsoft_JhengHei,system-ui,sans-serif]",
             ].join(" ")}
           />
 
           {error && tab === "text" && (
-            <div className="flex items-start gap-2 mt-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-              <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
-              <span>{error}</span>
+            <div className="mt-3 border border-risk-high bg-risk-high-bg rounded-sm px-3 py-2 text-sm text-risk-high">
+              <span className="font-mono text-[10px] uppercase tracking-[0.15em] mr-2">錯誤</span>
+              {error}
             </div>
           )}
 
           <Button
             onClick={handleSubmitText}
             disabled={!text.trim() || loading}
-            className="w-full mt-4 bg-[--cl-navy] hover:bg-[--cl-navy-light] text-white h-11 text-sm font-medium"
+            className={`w-full mt-5 h-11 text-sm font-medium tracking-wide rounded-sm ${loading ? "" : "disabled:opacity-100 disabled:bg-muted disabled:text-muted-foreground"}`}
           >
             {loading ? (
               <span className="flex items-center gap-2">

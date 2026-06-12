@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import { createJobEventSource } from "@/lib/api";
 import type { Report } from "@/lib/types";
-import { AlertCircle, CheckCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Props {
@@ -80,55 +79,48 @@ export function AnalyzingView({
   return (
     <div className="w-full max-w-xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        {error ? (
-          <div className="w-9 h-9 rounded-full bg-red-100 flex items-center justify-center shrink-0">
-            <AlertCircle className="w-5 h-5 text-red-600" />
-          </div>
-        ) : (
-          <div className="w-9 h-9 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0">
-            <span className="cl-spin inline-block w-4 h-4 border-2 border-blue-200 border-t-[--cl-navy] rounded-full" />
-          </div>
-        )}
-        <div>
-          <p className="font-semibold text-sm text-foreground">
-            {error ? "分析失敗" : "正在分析合約..."}
-          </p>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            {error ? "請檢查錯誤訊息後重試" : "100% 本地運算，資料不離開你的電腦"}
-          </p>
-        </div>
+      <div className="mb-5 pb-3 border-b border-border flex items-baseline justify-between gap-3">
+        <p className={`font-serif text-base font-semibold ${error ? "text-risk-high" : "text-foreground"}`}>
+          {error ? "分析失敗" : "正在審查合約"}
+        </p>
+        <p className="font-mono text-[11px] text-muted-foreground">
+          {error ? "請檢查錯誤訊息後重試" : "100% 本地運算 · 資料不離開你的電腦"}
+        </p>
       </div>
 
       {/* Progress steps */}
       <ul
         ref={listRef}
-        className="space-y-1.5 max-h-72 overflow-y-auto pr-1"
+        className="max-h-72 overflow-y-auto pr-1 divide-y divide-border border-y border-border"
         aria-live="polite"
         aria-label="分析進度"
       >
         {messages.map((msg, i) => (
           <li
             key={i}
-            className="flex items-start gap-2.5 text-sm px-3 py-2 rounded-lg bg-secondary/60 border border-border"
+            className="flex items-baseline gap-3 text-sm px-1 py-2"
           >
-            <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
-            <span className="text-foreground leading-snug">{msg}</span>
+            <span className="font-mono text-[11px] text-muted-foreground tabular-nums shrink-0 w-6">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span className="text-muted-foreground leading-snug">{msg}</span>
           </li>
         ))}
         {!error && (
-          <li className="flex items-start gap-2.5 text-sm px-3 py-2 rounded-lg bg-blue-50/60 border border-blue-100">
-            <span className="cl-spin mt-0.5 shrink-0 inline-block w-4 h-4 border-2 border-blue-200 border-t-blue-500 rounded-full" />
-            <span className="text-blue-700 leading-snug">處理中...</span>
+          <li className="flex items-center gap-3 text-sm px-1 py-2">
+            <span className="shrink-0 w-6 flex items-center">
+              <span className="cl-spin inline-block w-3.5 h-3.5 border-2 border-primary/25 border-t-primary rounded-full" />
+            </span>
+            <span className="text-foreground leading-snug">處理中...</span>
           </li>
         )}
       </ul>
 
       {/* Error message */}
       {error && (
-        <div className="mt-4 flex items-start gap-2 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-3">
-          <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
-          <span>{error}</span>
+        <div className="mt-4 border border-risk-high bg-risk-high-bg rounded-sm px-3 py-3 text-sm text-risk-high">
+          <span className="font-mono text-[10px] uppercase tracking-[0.15em] mr-2">錯誤</span>
+          {error}
         </div>
       )}
 
@@ -137,9 +129,8 @@ export function AnalyzingView({
         <Button
           onClick={onRetry}
           variant="outline"
-          className="w-full mt-4 gap-2 border-[--cl-navy] text-[--cl-navy] hover:bg-[--cl-navy]/5"
+          className="w-full mt-5 h-10 rounded-sm tracking-wide"
         >
-          <RefreshCw className="w-4 h-4" />
           重新分析
         </Button>
       )}

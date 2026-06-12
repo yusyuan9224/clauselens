@@ -1,6 +1,6 @@
 [project]
 name = "clauselens"
-version = "0.1.0"
+version = "1.1.0"
 description = "100% 本地離線的繁中合約風險審查器 — local-first Traditional Chinese contract risk reviewer"
 license = { text = "MIT" }
 readme = "README.md"

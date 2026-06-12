@@ -3,21 +3,8 @@
 import { useRef, useState, useCallback } from "react";
 import type { Report, Severity, RiskType } from "@/lib/types";
 import { RISK_TYPE_LABELS } from "@/lib/types";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ContractText } from "@/components/ContractText";
-import {
-  AlertTriangle,
-  RefreshCw,
-  Download,
-  FileText,
-  Users,
-  Calendar,
-  DollarSign,
-  XCircle,
-  ShieldAlert,
-} from "lucide-react";
 
 interface Props {
   report: Report;
@@ -33,35 +20,29 @@ const SEVERITY_LABEL: Record<Severity, string> = {
 
 const SEVERITY_COLORS: Record<
   Severity,
-  { badge: string; border: string; bg: string; text: string; dot: string }
+  { tag: string; text: string; dot: string }
 > = {
   high: {
-    badge: "bg-red-100 text-red-700 border border-red-200",
-    border: "border-l-red-500",
-    bg: "bg-[--cl-red-bg]",
-    text: "text-red-700",
-    dot: "bg-red-500",
+    tag: "text-risk-high border-risk-high/40 bg-risk-high-bg",
+    text: "text-risk-high",
+    dot: "bg-risk-high",
   },
   medium: {
-    badge: "bg-orange-100 text-orange-700 border border-orange-200",
-    border: "border-l-orange-500",
-    bg: "bg-[--cl-orange-bg]",
-    text: "text-orange-700",
-    dot: "bg-orange-500",
+    tag: "text-risk-medium border-risk-medium/40 bg-risk-medium-bg",
+    text: "text-risk-medium",
+    dot: "bg-risk-medium",
   },
   low: {
-    badge: "bg-yellow-100 text-yellow-700 border border-yellow-200",
-    border: "border-l-yellow-500",
-    bg: "bg-[--cl-yellow-bg]",
-    text: "text-yellow-700",
-    dot: "bg-yellow-400",
+    tag: "text-risk-low border-risk-low/40 bg-risk-low-bg",
+    text: "text-risk-low",
+    dot: "bg-risk-low",
   },
 };
 
 function scoreColor(score: number): string {
-  if (score >= 60) return "text-red-600";
-  if (score >= 30) return "text-orange-500";
-  return "text-green-600";
+  if (score >= 60) return "text-risk-high";
+  if (score >= 30) return "text-risk-medium";
+  return "text-risk-safe";
 }
 
 function scoreLabel(score: number): string {
@@ -70,30 +51,33 @@ function scoreLabel(score: number): string {
   return "低風險";
 }
 
-function scoreBg(score: number): string {
-  if (score >= 60) return "bg-red-50 border-red-200";
-  if (score >= 30) return "bg-orange-50 border-orange-200";
-  return "bg-green-50 border-green-200";
+function scoreTagClass(score: number): string {
+  if (score >= 60) return SEVERITY_COLORS.high.tag;
+  if (score >= 30) return SEVERITY_COLORS.medium.tag;
+  return "text-risk-safe border-risk-safe/40 bg-risk-safe-bg";
+}
+
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+      {children}
+    </p>
+  );
 }
 
 function KeyField({
-  icon,
   label,
   value,
 }: {
-  icon: React.ReactNode;
   label: string;
   value: string | null | undefined;
 }) {
   return (
-    <div className="flex items-start gap-2.5 py-2">
-      <div className="text-muted-foreground mt-0.5 shrink-0">{icon}</div>
-      <div className="min-w-0">
-        <p className="text-xs text-muted-foreground leading-none mb-1">{label}</p>
-        <p className="text-sm text-foreground leading-snug">
-          {value ?? <span className="text-muted-foreground italic">未識別</span>}
-        </p>
-      </div>
+    <div className="grid grid-cols-[5.5rem_1fr] gap-x-3 py-2">
+      <p className="font-mono text-[11px] text-muted-foreground leading-6">{label}</p>
+      <p className="text-sm text-foreground leading-6 tabular-nums">
+        {value ?? <span className="text-muted-foreground/70">未識別</span>}
+      </p>
     </div>
   );
 }
@@ -135,28 +119,30 @@ export function ReportView({ report, fileName, onReset }: Props) {
   return (
     <div className="flex flex-col h-full min-h-0">
       {/* Top bar */}
-      <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-border bg-white shrink-0">
-        <div className="flex items-center gap-2.5 min-w-0">
-          <FileText className="w-4 h-4 text-muted-foreground shrink-0" />
-          <span className="text-sm font-medium text-foreground truncate">{fileName}</span>
+      <div className="flex items-center justify-between gap-3 px-6 py-2.5 border-b border-border bg-background shrink-0">
+        <div className="flex items-baseline gap-3 min-w-0">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground shrink-0">
+            審查報告
+          </span>
+          <span className="font-serif text-sm font-semibold text-foreground truncate">
+            {fileName}
+          </span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <Button
             variant="outline"
             size="sm"
             onClick={onReset}
-            className="gap-1.5 text-xs h-8 border-border"
+            className="text-xs h-7 rounded-sm tracking-wide"
           >
-            <RefreshCw className="w-3.5 h-3.5" />
             重新分析
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={handleDownload}
-            className="gap-1.5 text-xs h-8 border-border"
+            className="text-xs h-7 rounded-sm tracking-wide"
           >
-            <Download className="w-3.5 h-3.5" />
             下載 JSON
           </Button>
         </div>
@@ -165,122 +151,96 @@ export function ReportView({ report, fileName, onReset }: Props) {
       {/* Dual pane */}
       <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* LEFT: risk overview + cards */}
-        <div className="w-full lg:w-[420px] xl:w-[460px] shrink-0 overflow-y-auto border-r border-border bg-white">
-          <div className="p-5 space-y-5">
+        <div className="w-full lg:w-[420px] xl:w-[460px] shrink-0 overflow-y-auto border-r border-border bg-background">
+          <div className="p-5 space-y-6">
             {/* Risk score */}
-            <div className={`rounded-xl border p-5 ${scoreBg(report.risk_score)}`}>
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <ShieldAlert className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                    風險評分
-                  </span>
-                </div>
+            <section className="border border-border bg-card rounded-sm p-5">
+              <div className="flex items-center justify-between mb-4">
+                <Eyebrow>風險評分</Eyebrow>
                 <span
-                  className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${scoreBg(report.risk_score)} ${scoreColor(report.risk_score)}`}
+                  className={`font-mono text-[10px] font-medium uppercase tracking-[0.15em] px-1.5 py-0.5 border rounded-sm ${scoreTagClass(report.risk_score)}`}
                 >
                   {scoreLabel(report.risk_score)}
                 </span>
               </div>
-              <div className="flex items-end gap-3 mb-3">
-                <span className={`text-6xl font-bold leading-none tabular-nums ${scoreColor(report.risk_score)}`}>
+              <div className="flex items-baseline gap-2 mb-3">
+                <span
+                  className={`font-serif text-6xl font-semibold leading-none tabular-nums ${scoreColor(report.risk_score)}`}
+                >
                   {report.risk_score}
                 </span>
-                <span className="text-muted-foreground text-sm mb-1">/ 100</span>
+                <span className="font-mono text-xs text-muted-foreground tabular-nums">/ 100</span>
               </div>
               {/* Mini counts */}
-              <div className="flex gap-3 mb-4">
+              <div className="flex gap-4 pb-3 mb-3 border-b border-border font-mono text-[11px] tabular-nums">
                 {highCount > 0 && (
-                  <span className="flex items-center gap-1 text-xs text-red-600">
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 inline-block" />
-                    {highCount} 高
+                  <span className="flex items-center gap-1.5 text-risk-high">
+                    <span className="w-1.5 h-1.5 rounded-full bg-risk-high inline-block" />
+                    高 {highCount}
                   </span>
                 )}
                 {mediumCount > 0 && (
-                  <span className="flex items-center gap-1 text-xs text-orange-600">
-                    <span className="w-1.5 h-1.5 rounded-full bg-orange-500 inline-block" />
-                    {mediumCount} 中
+                  <span className="flex items-center gap-1.5 text-risk-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-risk-medium inline-block" />
+                    中 {mediumCount}
                   </span>
                 )}
                 {lowCount > 0 && (
-                  <span className="flex items-center gap-1 text-xs text-yellow-600">
-                    <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 inline-block" />
-                    {lowCount} 低
+                  <span className="flex items-center gap-1.5 text-risk-low">
+                    <span className="w-1.5 h-1.5 rounded-full bg-risk-low inline-block" />
+                    低 {lowCount}
                   </span>
                 )}
                 {report.risks.length === 0 && (
-                  <span className="text-xs text-muted-foreground">未發現風險條款</span>
+                  <span className="text-muted-foreground">未發現風險條款</span>
                 )}
               </div>
               <p className="text-sm text-foreground leading-relaxed">{report.summary}</p>
-            </div>
+            </section>
 
             {/* Key fields */}
-            <Card className="shadow-none">
-              <CardHeader className="py-3 px-4">
-                <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                  關鍵欄位
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="px-4 pb-4 pt-0 space-y-0 divide-y divide-border">
+            <section className="border border-border bg-card rounded-sm p-5">
+              <div className="pb-2.5 mb-1 border-b border-border">
+                <Eyebrow>關鍵欄位</Eyebrow>
+              </div>
+              <div className="divide-y divide-border">
                 {/* Parties */}
-                <div className="flex items-start gap-2.5 py-2">
-                  <div className="text-muted-foreground mt-0.5 shrink-0">
-                    <Users className="w-4 h-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-xs text-muted-foreground leading-none mb-1">當事人</p>
-                    {report.key_fields.parties.length > 0 ? (
-                      <ul className="space-y-0.5">
-                        {report.key_fields.parties.map((p, i) => (
-                          <li key={i} className="text-sm text-foreground leading-snug">
-                            {p.name}
-                            {p.role && (
-                              <span className="text-muted-foreground text-xs ml-1.5">({p.role})</span>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <span className="text-sm text-muted-foreground italic">未識別</span>
-                    )}
-                  </div>
+                <div className="grid grid-cols-[5.5rem_1fr] gap-x-3 py-2">
+                  <p className="font-mono text-[11px] text-muted-foreground leading-6">當事人</p>
+                  {report.key_fields.parties.length > 0 ? (
+                    <ul className="space-y-0.5">
+                      {report.key_fields.parties.map((p, i) => (
+                        <li key={i} className="text-sm text-foreground leading-6">
+                          {p.name}
+                          {p.role && (
+                            <span className="font-mono text-[11px] text-muted-foreground ml-1.5">
+                              （{p.role}）
+                            </span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <span className="text-sm text-muted-foreground/70 leading-6">未識別</span>
+                  )}
                 </div>
-                <KeyField
-                  icon={<FileText className="w-4 h-4" />}
-                  label="標的"
-                  value={report.key_fields.subject}
-                />
-                <KeyField
-                  icon={<DollarSign className="w-4 h-4" />}
-                  label="金額"
-                  value={report.key_fields.amount}
-                />
-                <KeyField
-                  icon={<Calendar className="w-4 h-4" />}
-                  label="起始日"
-                  value={report.key_fields.start_date}
-                />
-                <KeyField
-                  icon={<Calendar className="w-4 h-4" />}
-                  label="終止日"
-                  value={report.key_fields.end_date}
-                />
-                <KeyField
-                  icon={<XCircle className="w-4 h-4" />}
-                  label="終止條件"
-                  value={report.key_fields.termination}
-                />
-              </CardContent>
-            </Card>
+                <KeyField label="標的" value={report.key_fields.subject} />
+                <KeyField label="金額" value={report.key_fields.amount} />
+                <KeyField label="起始日" value={report.key_fields.start_date} />
+                <KeyField label="終止日" value={report.key_fields.end_date} />
+                <KeyField label="終止條件" value={report.key_fields.termination} />
+              </div>
+            </section>
 
             {/* Risk cards */}
             {report.risks.length > 0 && (
-              <div className="space-y-3">
-                <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-2">
-                  <AlertTriangle className="w-3.5 h-3.5" />
-                  風險條款（{report.risks.length}）
-                </h2>
+              <section className="space-y-3">
+                <div className="flex items-baseline justify-between pb-2 border-b border-border">
+                  <Eyebrow>風險條款</Eyebrow>
+                  <span className="font-mono text-[11px] text-muted-foreground tabular-nums">
+                    共 {report.risks.length} 項
+                  </span>
+                </div>
                 {report.risks.map((risk, i) => {
                   const colors = SEVERITY_COLORS[risk.severity];
                   const isActive = activeRiskIndex === i;
@@ -293,34 +253,32 @@ export function ReportView({ report, fileName, onReset }: Props) {
                       }}
                       onClick={() => handleCardClick(i)}
                       className={[
-                        "rounded-xl border-l-4 border border-border p-4 cursor-pointer",
-                        "transition-all duration-150",
-                        colors.border,
-                        isActive ? "ring-2 ring-offset-1 ring-[--cl-navy]/30 shadow-sm" : "hover:shadow-sm hover:border-l-4",
+                        "border rounded-sm bg-card p-4 cursor-pointer",
+                        "transition-colors duration-150",
+                        isActive
+                          ? "border-foreground"
+                          : "border-border hover:border-foreground/40",
                       ].join(" ")}
                       role="button"
                       tabIndex={0}
                       aria-pressed={isActive}
                       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleCardClick(i); }}
                     >
-                      {/* Header row */}
-                      <div className="flex items-start justify-between gap-2 mb-2">
-                        <div className="flex flex-wrap items-center gap-1.5">
-                          <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${colors.badge}`}>
-                            <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
-                            {SEVERITY_LABEL[risk.severity]}
-                          </span>
-                          <Badge
-                            variant="outline"
-                            className="text-xs px-2 py-0.5 font-normal text-muted-foreground border-border"
-                          >
-                            {RISK_TYPE_LABELS[risk.risk_type as RiskType] ?? risk.risk_type}
-                          </Badge>
-                        </div>
+                      {/* Header row: clause number + corner severity tag */}
+                      <div className="flex items-baseline justify-between gap-2 mb-2.5">
+                        <span className="font-mono text-[11px] text-muted-foreground tabular-nums">
+                          {String(i + 1).padStart(2, "0")} ·{" "}
+                          {RISK_TYPE_LABELS[risk.risk_type as RiskType] ?? risk.risk_type}
+                        </span>
+                        <span
+                          className={`font-mono text-[10px] font-medium uppercase tracking-[0.15em] px-1.5 py-0.5 border rounded-sm shrink-0 ${colors.tag}`}
+                        >
+                          {SEVERITY_LABEL[risk.severity]}
+                        </span>
                       </div>
 
                       {/* Title */}
-                      <p className="font-semibold text-sm text-foreground leading-snug mb-1.5">
+                      <p className="font-serif font-semibold text-[15px] text-foreground leading-snug mb-1.5">
                         {risk.title}
                       </p>
 
@@ -331,53 +289,49 @@ export function ReportView({ report, fileName, onReset }: Props) {
 
                       {/* Quote */}
                       {risk.quote && (
-                        <blockquote className={`border-l-2 ${colors.border.replace("border-l-", "border-l-")} pl-3 py-1 rounded-r text-xs leading-relaxed text-foreground/80 bg-secondary/40`}>
+                        <blockquote className="border-l border-border pl-3 py-0.5 font-serif text-[13px] leading-relaxed text-foreground/75">
                           「{risk.quote}」
                         </blockquote>
                       )}
 
                       {/* Unverified warning */}
                       {!risk.verified && (
-                        <div className="mt-2.5 flex items-center gap-1.5 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-md px-2.5 py-1.5">
-                          <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-                          ⚠ 引文未對回原文
-                        </div>
+                        <p className="mt-2.5 font-mono text-[11px] text-risk-medium">
+                          ※ 引文未對回原文
+                        </p>
                       )}
 
                       {/* Highlight hint */}
                       {risk.start !== null && (
-                        <p className="mt-2.5 text-xs text-muted-foreground">
-                          點擊可在右欄定位原文位置
+                        <p className="mt-2.5 font-mono text-[11px] text-muted-foreground/70">
+                          點擊定位原文位置 →
                         </p>
                       )}
                     </div>
                   );
                 })}
-              </div>
+              </section>
             )}
 
             {report.risks.length === 0 && (
-              <div className="text-center py-10 text-muted-foreground text-sm">
-                未發現明顯風險條款
+              <div className="text-center py-10 border border-border rounded-sm bg-card">
+                <p className="font-serif text-sm text-muted-foreground">未發現明顯風險條款</p>
               </div>
             )}
           </div>
         </div>
 
         {/* RIGHT: contract full text */}
-        <div className="flex-1 min-w-0 overflow-y-auto bg-white">
-          <div className="sticky top-0 z-10 px-5 py-2.5 border-b border-border bg-white/95 backdrop-blur-sm">
-            <p className="text-xs font-medium text-muted-foreground flex items-center gap-2">
-              <FileText className="w-3.5 h-3.5" />
-              合約全文
-              {report.risks.filter((r) => r.start !== null).length > 0 && (
-                <span className="text-muted-foreground/60">
-                  · 已標記 {report.risks.filter((r) => r.start !== null).length} 處風險
-                </span>
-              )}
-            </p>
+        <div className="flex-1 min-w-0 overflow-y-auto bg-card">
+          <div className="sticky top-0 z-10 px-7 py-2.5 border-b border-border bg-card/95 backdrop-blur-sm flex items-baseline gap-3">
+            <Eyebrow>合約全文</Eyebrow>
+            {report.risks.filter((r) => r.start !== null).length > 0 && (
+              <span className="font-mono text-[11px] text-muted-foreground/70 tabular-nums">
+                已標記 {report.risks.filter((r) => r.start !== null).length} 處風險
+              </span>
+            )}
           </div>
-          <div className="px-6 py-5">
+          <div className="px-7 py-6 max-w-3xl">
             <ContractText
               report={report}
               activeRiskIndex={activeRiskIndex}

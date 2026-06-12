@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Noto+Serif+TC:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -7,9 +8,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-geist-sans);
+  --font-sans: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+  --font-serif: "Source Serif 4", "Noto Serif TC", Charter, Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "PingFang TC", monospace;
+  --font-heading: var(--font-serif);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -39,6 +41,15 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  /* Print-style risk palette */
+  --color-risk-high: var(--cl-red);
+  --color-risk-medium: var(--cl-orange);
+  --color-risk-low: var(--cl-yellow);
+  --color-risk-safe: var(--cl-green);
+  --color-risk-high-bg: var(--cl-red-bg);
+  --color-risk-medium-bg: var(--cl-orange-bg);
+  --color-risk-low-bg: var(--cl-yellow-bg);
+  --color-risk-safe-bg: var(--cl-green-bg);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -49,54 +60,54 @@
 }
 
 :root {
-  --background: oklch(0.99 0 0);
-  --foreground: oklch(0.18 0.02 255);
+  /* Legal editorial — paper, ink, hairline */
+  --background: oklch(0.985 0.003 90);
+  --foreground: oklch(0.22 0.015 260);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.02 255);
+  --card-foreground: oklch(0.22 0.015 260);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.02 255);
-  --primary: oklch(0.28 0.06 255);
-  --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.96 0.005 255);
-  --secondary-foreground: oklch(0.28 0.06 255);
-  --muted: oklch(0.96 0.005 255);
-  --muted-foreground: oklch(0.52 0.02 255);
-  --accent: oklch(0.96 0.005 255);
-  --accent-foreground: oklch(0.28 0.06 255);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.91 0.005 255);
-  --input: oklch(0.91 0.005 255);
-  --ring: oklch(0.6 0.04 255);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.5rem;
-  --sidebar: oklch(0.97 0.005 255);
-  --sidebar-foreground: oklch(0.18 0.02 255);
-  --sidebar-primary: oklch(0.28 0.06 255);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.93 0.01 255);
-  --sidebar-accent-foreground: oklch(0.28 0.06 255);
-  --sidebar-border: oklch(0.91 0.005 255);
-  --sidebar-ring: oklch(0.6 0.04 255);
+  --popover-foreground: oklch(0.22 0.015 260);
+  --primary: oklch(0.48 0.13 25);
+  --primary-foreground: oklch(0.985 0.003 90);
+  --secondary: oklch(0.96 0.004 90);
+  --secondary-foreground: oklch(0.22 0.015 260);
+  --muted: oklch(0.955 0.004 90);
+  --muted-foreground: oklch(0.5 0.015 260);
+  --accent: oklch(0.48 0.13 25);
+  --accent-foreground: oklch(0.985 0.003 90);
+  --destructive: oklch(0.48 0.13 25);
+  --border: oklch(0.89 0.004 90);
+  --input: oklch(0.89 0.004 90);
+  --ring: oklch(0.6 0.02 260);
+  --chart-1: oklch(0.48 0.13 25);
+  --chart-2: oklch(0.55 0.11 60);
+  --chart-3: oklch(0.6 0.09 85);
+  --chart-4: oklch(0.5 0.08 145);
+  --chart-5: oklch(0.22 0.015 260);
+  --radius: 0.25rem;
+  --sidebar: oklch(0.97 0.004 90);
+  --sidebar-foreground: oklch(0.22 0.015 260);
+  --sidebar-primary: oklch(0.48 0.13 25);
+  --sidebar-primary-foreground: oklch(0.985 0.003 90);
+  --sidebar-accent: oklch(0.93 0.005 90);
+  --sidebar-accent-foreground: oklch(0.22 0.015 260);
+  --sidebar-border: oklch(0.89 0.004 90);
+  --sidebar-ring: oklch(0.6 0.02 260);
 
-  /* ClauseLens custom */
-  --cl-navy: #1B2A4A;
-  --cl-navy-light: #2A3F6F;
-  --cl-red: #DC2626;
-  --cl-orange: #D97706;
-  --cl-yellow: #CA8A04;
-  --cl-green: #16A34A;
-  --cl-red-bg: #FEF2F2;
-  --cl-orange-bg: #FFFBEB;
-  --cl-yellow-bg: #FEFCE8;
-  --cl-green-bg: #F0FDF4;
-  --cl-mark-high: rgba(220, 38, 38, 0.18);
-  --cl-mark-medium: rgba(217, 119, 6, 0.18);
-  --cl-mark-low: rgba(202, 138, 4, 0.14);
-  --cl-flash: rgba(220, 38, 38, 0.35);
+  /* ClauseLens custom — low-saturation print inks */
+  --cl-ink: oklch(0.22 0.015 260);
+  --cl-red: oklch(0.48 0.13 25); /* high — oxide red */
+  --cl-orange: oklch(0.55 0.11 60); /* medium — burnt amber */
+  --cl-yellow: oklch(0.6 0.09 85); /* low — ochre */
+  --cl-green: oklch(0.5 0.08 145); /* safe — moss */
+  --cl-red-bg: oklch(0.955 0.018 25);
+  --cl-orange-bg: oklch(0.96 0.022 60);
+  --cl-yellow-bg: oklch(0.965 0.025 85);
+  --cl-green-bg: oklch(0.96 0.018 145);
+  --cl-mark-high: oklch(0.48 0.13 25 / 0.14);
+  --cl-mark-medium: oklch(0.55 0.11 60 / 0.16);
+  --cl-mark-low: oklch(0.6 0.09 85 / 0.16);
+  --cl-flash: oklch(0.48 0.13 25 / 0.32);
 }
 
 .dark {
@@ -143,30 +154,30 @@
   }
 }
 
-/* Contract full-text highlight marks */
+/* Contract full-text highlight marks — print underscore style */
 mark.cl-high {
   background-color: var(--cl-mark-high);
   color: inherit;
-  border-radius: 2px;
+  border-radius: 1px;
   padding: 0 1px;
   cursor: pointer;
-  border-bottom: 2px solid var(--cl-red);
+  border-bottom: 1px solid var(--cl-red);
 }
 mark.cl-medium {
   background-color: var(--cl-mark-medium);
   color: inherit;
-  border-radius: 2px;
+  border-radius: 1px;
   padding: 0 1px;
   cursor: pointer;
-  border-bottom: 2px solid var(--cl-orange);
+  border-bottom: 1px solid var(--cl-orange);
 }
 mark.cl-low {
   background-color: var(--cl-mark-low);
   color: inherit;
-  border-radius: 2px;
+  border-radius: 1px;
   padding: 0 1px;
   cursor: pointer;
-  border-bottom: 2px solid var(--cl-yellow);
+  border-bottom: 1px solid var(--cl-yellow);
 }
 mark.cl-flash {
   animation: cl-flash-anim 0.8s ease-out;
@@ -181,7 +192,7 @@ mark.cl-flash {
   animation: cl-card-flash-anim 0.8s ease-out;
 }
 @keyframes cl-card-flash-anim {
-  0%   { box-shadow: 0 0 0 3px var(--cl-red); }
+  0%   { box-shadow: 0 0 0 2px var(--cl-red); }
   100% { box-shadow: none; }
 }
 
@@ -195,6 +206,6 @@ mark.cl-flash {
 
 /* Upload drop zone hover */
 .cl-dropzone-active {
-  border-color: var(--cl-navy) !important;
-  background-color: oklch(0.96 0.01 255) !important;
+  border-color: var(--cl-ink) !important;
+  background-color: oklch(0.965 0.004 90) !important;
 }

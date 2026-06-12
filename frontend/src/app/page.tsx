@@ -53,32 +53,19 @@ export default function Home() {
   const isReport = state.view === "report" && state.report;
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F7F8FA]">
-      {/* Top nav */}
-      <header className="bg-[--cl-navy] text-white shrink-0">
-        <div className="max-w-screen-xl mx-auto px-5 h-14 flex items-center justify-between">
-          {/* Brand */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-7 h-7 rounded-md bg-white/10 border border-white/20">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-              >
-                <rect x="2" y="2" width="5" height="12" rx="1" fill="white" opacity="0.9" />
-                <rect x="9" y="2" width="5" height="7" rx="1" fill="white" opacity="0.6" />
-                <rect x="9" y="11" width="5" height="3" rx="1" fill="white" opacity="0.4" />
-              </svg>
-            </div>
-            <span className="text-base font-semibold tracking-tight">ClauseLens</span>
+    <div className="flex flex-col min-h-screen bg-background">
+      {/* Masthead */}
+      <header className="shrink-0 bg-background border-b border-border">
+        <div className="max-w-screen-xl mx-auto px-6 h-16 flex items-end justify-between pb-3">
+          <div className="flex items-baseline gap-3 min-w-0">
+            <span className="font-serif text-[1.4rem] font-semibold tracking-tight text-foreground leading-none">
+              ClauseLens
+            </span>
+            <span className="hidden sm:inline font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+              合約條款風險審查
+            </span>
           </div>
-
-          {/* Health */}
-          <div className="flex items-center">
-            <HealthBadge />
-          </div>
+          <HealthBadge />
         </div>
       </header>
 
@@ -99,18 +86,19 @@ export default function Home() {
             {state.view === "upload" && (
               <>
                 {/* Hero */}
-                <div className="text-center mb-10">
-                  <h1 className="text-3xl font-bold text-[--cl-navy] tracking-tight mb-3">
-                    ClauseLens
+                <div className="text-center mb-9">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground mb-4">
+                    文件審查
+                  </p>
+                  <h1 className="font-serif text-3xl font-semibold text-foreground tracking-tight mb-3">
+                    合約條款風險分析
                   </h1>
                   <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
-                    100% 本地離線的合約風險審查 —
-                    <br />
-                    你的合約不離開你的電腦
+                    100% 本地離線審查 — 你的合約不離開你的電腦
                   </p>
                 </div>
 
-                <Separator className="mb-8 opacity-50" />
+                <Separator className="mb-8" />
 
                 <UploadPanel onJobStarted={handleJobStarted} />
               </>
@@ -119,15 +107,18 @@ export default function Home() {
             {state.view === "analyzing" && state.jobId && (
               <>
                 <div className="text-center mb-8">
-                  <h1 className="text-2xl font-bold text-[--cl-navy] tracking-tight mb-2">
-                    ClauseLens
+                  <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground mb-4">
+                    分析進行中
+                  </p>
+                  <h1 className="font-serif text-2xl font-semibold text-foreground tracking-tight mb-2">
+                    合約條款風險分析
                   </h1>
                   {state.fileName && (
-                    <p className="text-sm text-muted-foreground">{state.fileName}</p>
+                    <p className="font-mono text-xs text-muted-foreground">{state.fileName}</p>
                   )}
                 </div>
 
-                <Separator className="mb-8 opacity-50" />
+                <Separator className="mb-8" />
 
                 <AnalyzingView
                   jobId={state.jobId}
@@ -146,8 +137,8 @@ export default function Home() {
 
       {/* Footer — only shown on non-report views */}
       {!isReport && (
-        <footer className="shrink-0 border-t border-border bg-white py-3 px-5">
-          <p className="text-xs text-center text-muted-foreground">
+        <footer className="shrink-0 border-t border-border bg-background py-3 px-6">
+          <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-center text-muted-foreground">
             ClauseLens · 本地離線運行 · 合約資料不上傳雲端
           </p>
         </footer>
