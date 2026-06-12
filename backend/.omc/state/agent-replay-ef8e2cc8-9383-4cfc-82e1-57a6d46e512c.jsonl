@@ -1,2 +1,3 @@
 {"t":0,"agent":"a5c5877","agent_type":"designer","event":"agent_start","parent_mode":"none"}
 {"t":0,"agent":"a5c5877","agent_type":"designer","event":"agent_stop","success":true,"duration_ms":382699}
+{"t":0,"agent":"acc6f34","agent_type":"document-specialist","event":"agent_start","parent_mode":"none"}

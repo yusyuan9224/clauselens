@@ -1,0 +1,65 @@
+{
+  "overall_risk_recall": "11/13",
+  "per_file": {
+    "房屋租賃契約_範例.txt": {
+      "risk_recall": "4/5",
+      "hits": [
+        "自動續約",
+        "隨時終止三日遷出",
+        "每日5%違約金或六個月租金",
+        "單方修改契約"
+      ],
+      "misses": [
+        "押金沒收"
+      ],
+      "key_fields": "4/4",
+      "key_fields_missing": [],
+      "citation_verified": "6/7",
+      "total_findings": 7,
+      "severities": {
+        "high": 6,
+        "medium": 1,
+        "low": 0
+      }
+    },
+    "勞動契約_範例.txt": {
+      "risk_recall": "3/4",
+      "hits": [
+        "競業禁止兩年百萬違約金",
+        "雇主隨時終止三日通知",
+        "工作規則隨時修訂"
+      ],
+      "misses": [
+        "延長工時不得拒絕"
+      ],
+      "key_fields": "3/3",
+      "key_fields_missing": [],
+      "citation_verified": "7/7",
+      "total_findings": 7,
+      "severities": {
+        "high": 7,
+        "medium": 0,
+        "low": 0
+      }
+    },
+    "軟體外包合約_範例.txt": {
+      "risk_recall": "4/4",
+      "hits": [
+        "需求調整不另計費",
+        "驗收甲方全權認定",
+        "逾期罰金與返還全部報酬",
+        "甲方隨時終止乙方不得終止"
+      ],
+      "misses": [],
+      "key_fields": "4/4",
+      "key_fields_missing": [],
+      "citation_verified": "3/4",
+      "total_findings": 4,
+      "severities": {
+        "high": 2,
+        "medium": 2,
+        "low": 0
+      }
+    }
+  }
+}

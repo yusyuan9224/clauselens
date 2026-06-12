@@ -59,8 +59,19 @@ class LLMRiskItem(BaseModel):
     quote: str = Field(description="逐字引用合約原文中構成風險的句子,不得改寫")
 
 
+class LLMTypedRiskItem(BaseModel):
+    """檢查清單掃描的單項輸出:風險類型由清單決定,模型不需自報。"""
+
+    severity: Severity
+    title: str = Field(description="風險標題,15 字內")
+    explanation: str = Field(description="為何有風險、對哪一方不利,60 字內")
+    quote: str = Field(description="逐字引用合約原文中構成風險的句子,不得改寫")
+
+
 class LLMRiskScan(BaseModel):
-    risks: list[LLMRiskItem] = Field(default_factory=list)
+    # 必填(無 default):JSON schema 會帶 required,Ollama constrained decoding
+    # 從文法層禁止模型輸出 {} 偷懶;真的無風險仍可輸出 {"risks": []}
+    risks: list[LLMTypedRiskItem]
 
 
 class RiskFinding(LLMRiskItem):

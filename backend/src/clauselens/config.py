@@ -19,7 +19,9 @@ class Settings(BaseSettings):
     llm_retries: int = 3
     chunk_max_chars: int = 600
     chunk_overlap: int = 80
-    risk_batch_size: int = 3
+    # 檢查清單掃描:每種風險類型對每個視窗做一次聚焦詢問
+    scan_window_chars: int = 3000
+    scan_concurrency: int = 3
 
 
 settings = Settings()

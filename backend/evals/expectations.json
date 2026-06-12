@@ -1,0 +1,30 @@
+{
+  "房屋租賃契約_範例.txt": {
+    "key_fields_required": ["parties", "amount", "start_date", "end_date"],
+    "expected_risks": [
+      { "name": "自動續約", "quote_keyword": "自動續約", "types": ["auto_renewal"] },
+      { "name": "押金沒收", "quote_keyword": "沒收", "types": ["high_penalty", "other", "unfavorable_termination"] },
+      { "name": "隨時終止三日遷出", "quote_keyword": "隨時終止", "types": ["unfavorable_termination"] },
+      { "name": "每日5%違約金或六個月租金", "quote_keyword": "違約金", "types": ["high_penalty"] },
+      { "name": "單方修改契約", "quote_keyword": "單方面修改", "types": ["unilateral_change"] }
+    ]
+  },
+  "勞動契約_範例.txt": {
+    "key_fields_required": ["parties", "amount", "start_date"],
+    "expected_risks": [
+      { "name": "競業禁止兩年百萬違約金", "quote_keyword": "競爭", "types": ["non_compete", "high_penalty"] },
+      { "name": "雇主隨時終止三日通知", "quote_keyword": "隨時終止", "types": ["unfavorable_termination"] },
+      { "name": "延長工時不得拒絕", "quote_keyword": "不得拒絕", "types": ["unfavorable_termination", "other", "vague_terms", "unilateral_change"] },
+      { "name": "工作規則隨時修訂", "quote_keyword": "修訂", "types": ["unilateral_change", "vague_terms"] }
+    ]
+  },
+  "軟體外包合約_範例.txt": {
+    "key_fields_required": ["parties", "amount", "start_date", "end_date"],
+    "expected_risks": [
+      { "name": "需求調整不另計費", "quote_keyword": "不另計費", "types": ["unilateral_change", "vague_terms", "other"] },
+      { "name": "驗收甲方全權認定", "quote_keyword": "全權認定", "types": ["vague_terms", "unfavorable_termination", "unilateral_change", "other"] },
+      { "name": "逾期罰金與返還全部報酬", "quote_keyword": "返還已受領", "types": ["high_penalty"] },
+      { "name": "甲方隨時終止乙方不得終止", "quote_keyword": "隨時", "types": ["unfavorable_termination"] }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cd \\\"/Users/yusyuanliu/Documents/program file/work/clauselens\\\" && docker compose ps && curl -s http://localhost:8000/api/health && echo && curl -s -o /dev/null -w \\\"frontend HTTP %{http_c...",
+  "error": "Exit code 7\nNAME      IMAGE     COMMAND   SERVICE   CREATED   STATUS    PORTS",
+  "timestamp": "2026-06-12T13:17:42.929Z",
+  "retry_count": 1
+}

@@ -1,0 +1,40 @@
+# ClauseLens 一鍵啟動:docker compose up --build
+#
+# 前置需求:host 上安裝 Ollama 並拉好模型(Ollama 留在 host 才能用 GPU/Metal 加速):
+#   ollama pull qwen2.5:7b && ollama pull bge-m3
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c ':> /dev/tcp/127.0.0.1/6333' || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      CLAUSELENS_QDRANT_URL: http://qdrant:6333
+      CLAUSELENS_OLLAMA_BASE_URL: http://host.docker.internal:11434
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Linux 也能連 host 上的 Ollama
+    depends_on:
+      qdrant:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  qdrant_storage:

@@ -30,6 +30,12 @@ class TestFindQuoteSpan:
         assert span is not None
         assert text[span[0] : span[1]].replace("\n", "") == "乙方應賠償甲方相當於六個月租金之違約金"
 
+    def test_fullwidth_halfwidth_punctuation_tolerant(self):
+        text = "乙方不得拒絕,並應配合辦理。"  # 原文半形逗號
+        span = find_quote_span(text, "乙方不得拒絕,並應配合辦理。")  # LLM 引用寫成全形
+        assert span is not None
+        assert text[span[0] : span[1]] == text
+
     def test_hallucinated_quote_returns_none(self):
         assert find_quote_span("合約原文。", "這句根本不存在的引文") is None
 
