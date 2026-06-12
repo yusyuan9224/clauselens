@@ -82,6 +82,7 @@ class ChunkOut(BaseModel):
 
 class AnalysisReport(BaseModel):
     source: str
+    full_text: str = ""  # 合約全文,UI 依 risks 的 start/end 絕對偏移渲染高亮
     key_fields: KeyFields
     risks: list[RiskFinding]
     risk_score: int = Field(ge=0, le=100)

@@ -126,6 +126,7 @@ async def analyze_document(
     score = compute_risk_score(risks)
     return AnalysisReport(
         source=parsed.source,
+        full_text=parsed.text,
         key_fields=key_fields,
         risks=risks,
         risk_score=score,
