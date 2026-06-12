@@ -1,0 +1,17 @@
+{
+  "agents": [
+    {
+      "agent_id": "a5c5877fcf5ec352b",
+      "agent_type": "oh-my-claudecode:designer",
+      "started_at": "2026-06-12T13:04:12.255Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-06-12T13:10:34.954Z",
+      "duration_ms": 382699
+    }
+  ],
+  "total_spawned": 1,
+  "total_completed": 1,
+  "total_failed": 0,
+  "last_updated": "2026-06-12T13:10:35.057Z"
+}
